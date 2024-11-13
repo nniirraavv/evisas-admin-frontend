@@ -41,55 +41,8 @@ export default defineConfig({
         },
         {
           path: '',
-          redirect: '/apply',
+          redirect: '/visa/applications',
           hideInMenu: true,
-        },
-        {
-          name: 'apply',
-          path: '/apply',
-          component: '@/pages/Apply/index',
-        },
-        {
-          name: 'visas',
-          path: '/apply/visa',
-          component: './Apply/Visa',
-          hideInMenu: true,
-        },
-        {
-          name: 'create_visa_application',
-          path: '/apply/visa/:id/:step',
-          component: './Apply/Visa/$id.tsx',
-          hideInMenu: true,
-          routes: [
-            {
-              name: 'travel_details',
-              path: 'travel_details',
-              component:
-                '@/components/Forms/Visa/VisaApplicationSteps/TripAndTravellerDetails_Step_One',
-              hideInMenu: true,
-            },
-            {
-              name: 'travel_details',
-              path: ':applicationNo/travel_details',
-              component:
-                '@/components/Forms/Visa/VisaApplicationSteps/TripAndTravellerDetails_Step_One',
-              hideInMenu: true,
-            },
-            {
-              name: 'add_documents',
-              path: ':applicationNo/add_documents',
-              component:
-                '@/components/Forms/Visa/VisaApplicationSteps/AddDocuments_Step_Two',
-              hideInMenu: true,
-            },
-            {
-              name: 'payment_summary',
-              path: ':applicationNo/payment_summary',
-              component:
-                '@/components/Forms/Visa/VisaApplicationSteps/PaymentSummary_Step_Three',
-              hideInMenu: true,
-            },
-          ],
         },
         {
           name: 'visa_applications',
@@ -101,15 +54,6 @@ export default defineConfig({
           path: '/visa/applications/:applicationNo',
           component: './VisaApplications/$id.tsx',
           hideInMenu: true,
-          // routes: [
-          //   {
-          //     name: 'Details',
-          //     path: ':visaId',
-          //     component:
-          //       '@/components/Forms/Visa/VisaSteps/TripAndTravellerDetails_Step_One',
-          //     hideInMenu: true,
-          //   },
-          // ],
         },
         {
           name: ' Settings',
@@ -131,12 +75,7 @@ export default defineConfig({
       component: './Auth/ForgotPassword',
       layout: false,
     },
-    {
-      name: 'sign_up',
-      path: '/sign-up',
-      component: './Auth/Signup',
-      layout: false,
-    },
+    { path: '/*', component: '@/pages/404', layout: false },
   ],
 
   npmClient: 'pnpm',

@@ -12,12 +12,14 @@ import {
   VisaApplication,
 } from './typings';
 
+const controllerBaseUrl = '/v1/admin/applications';
+
 /** POST /v1/applications */
 export async function createVisaApplication(
   data: CreateApplicationBody,
   options?: { [key: string]: any },
 ) {
-  return request<ICreateVisaApplicationResponse>('/v1/applications', {
+  return request<ICreateVisaApplicationResponse>(controllerBaseUrl, {
     method: 'POST',
     data,
     ...(options || {}),
@@ -29,7 +31,7 @@ export async function getVisaApplications(
   options?: { [key: string]: any },
 ) {
   return request<IVisaApplicationsResponse<VisaApplication>>(
-    '/v1/applications',
+    controllerBaseUrl,
     {
       method: 'GET',
       params: { ...pageParams },
@@ -43,7 +45,7 @@ export async function getVisaApplication(
   options?: { [key: string]: any },
 ) {
   return request<ICreateVisaApplicationResponse>(
-    `/v1/applications/${applicationNo}`,
+    `${controllerBaseUrl}/${applicationNo}`,
     {
       method: 'GET',
       ...(options || {}),
@@ -56,7 +58,7 @@ export async function getTravellerPresignedUrl(
   options?: { [key: string]: any },
 ) {
   return request<PresignedUrlResponse>(
-    '/v1/applications/file-documents/upload-presign-url',
+    `${controllerBaseUrl}/file-documents/upload-presign-url`,
     {
       method: 'POST',
       data: { ...params },
@@ -70,7 +72,7 @@ export async function getVisaApplicationPayments(
   options?: { [key: string]: any },
 ) {
   return request<IVisaApplicationsPaymentsResponse>(
-    `/v1/applications/${applicationNo}/payments`,
+    `${controllerBaseUrl}/${applicationNo}/payments`,
     {
       method: 'GET',
       ...(options || {}),
@@ -82,20 +84,26 @@ export async function deleteVisaApplication(
   applicationNo: string,
   options?: { [key: string]: any },
 ) {
-  return request<PresignedUrlResponse>(`/v1/applications/${applicationNo}`, {
-    method: 'DELETE',
-    ...(options || {}),
-  });
+  return request<PresignedUrlResponse>(
+    `${controllerBaseUrl}/${applicationNo}`,
+    {
+      method: 'DELETE',
+      ...(options || {}),
+    },
+  );
 }
 /** PATCH - /v1/applications/:applicationNo/submit */
 export async function submitVisaApplication(
   applicationNo: string,
   options?: { [key: string]: any },
 ) {
-  return request<IResponseStatus>(`/v1/applications/${applicationNo}/submit`, {
-    method: 'PATCH',
-    ...(options || {}),
-  });
+  return request<IResponseStatus>(
+    `${controllerBaseUrl}/${applicationNo}/submit`,
+    {
+      method: 'PATCH',
+      ...(options || {}),
+    },
+  );
 }
 
 ////////////////////////////////////
@@ -108,7 +116,7 @@ export async function createOrderCpay(
   options?: { [key: string]: any },
 ) {
   return request<CreateCpayOrderResponse>(
-    `/v1/applications/${applicationNo}/payments/order/cpay`,
+    `${controllerBaseUrl}/${applicationNo}/payments/order/cpay`,
     {
       method: 'GET',
       ...(options || {}),
@@ -125,7 +133,7 @@ export async function verifyBookingCpay(
   options?: { [key: string]: any },
 ) {
   return request<CreateCpayOrderResponse>(
-    `/v1/applications/${applicationNo}/payments/order/cpay/verify-booking`,
+    `${controllerBaseUrl}/${applicationNo}/payments/order/cpay/verify-booking`,
     {
       method: 'POST',
       data,

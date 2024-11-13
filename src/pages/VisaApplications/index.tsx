@@ -11,8 +11,8 @@ import {
   deleteVisaApplication,
   getVisaApplications,
 } from '@/services/visaApplication/VisaApplicationController';
-import { ApplicationStatus } from '@/types';
-import { DeleteOutlined, EyeOutlined, PlusOutlined } from '@ant-design/icons';
+import { ApplicationStatus, ApplicationStatusUITabs } from '@/types';
+import { DeleteOutlined, EyeOutlined } from '@ant-design/icons';
 import {
   ActionType,
   PageContainer,
@@ -32,12 +32,12 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import { FC, useRef, useState } from 'react';
+import { FC, useMemo, useRef, useState } from 'react';
 
 const { Text } = Typography;
 
 interface Props {
-  applicationStatus: string;
+  applicationStatus?: string;
 }
 
 const VisaApplicationTable: FC<Props> = ({ applicationStatus }) => {
@@ -274,41 +274,69 @@ const VisaApplicationTable: FC<Props> = ({ applicationStatus }) => {
 };
 
 const VisaApplications = () => {
-  const [activeKey, setActiveKey] = useState<string>(ApplicationStatus.CREATED);
-  const navigate = useNavigate();
+  const [activeKey, setActiveKey] = useState<string>(
+    ApplicationStatusUITabs.ALL,
+  );
 
-  const handleAddVisaApplication = () => navigate('/apply');
+  const mappedApplicationStatus = useMemo(() => {
+    let status;
+    switch (activeKey) {
+      case ApplicationStatusUITabs.ALL:
+        break;
+      case ApplicationStatusUITabs.SUBMITTED:
+        status = ApplicationStatus.SUBMITTED;
+        break;
+      case ApplicationStatusUITabs.VERIFIED:
+        status = ApplicationStatus.VERIFIED;
+        break;
+      case ApplicationStatusUITabs.ACTION_REQUIRED:
+        status = ApplicationStatus.ACTION_REQUIRED;
+        break;
+      case ApplicationStatusUITabs.SENT_TO:
+        status = `${ApplicationStatus.SENT_TO_EXCHANGE},${ApplicationStatus.SENT_TO_IMM}`;
+        break;
+      case ApplicationStatusUITabs.COMPLETED:
+        status = `${ApplicationStatus.APPROVED},${ApplicationStatus.REJECTED},${ApplicationStatus.APPROVED_PARTIAL},${ApplicationStatus.REJECTED_PARTIAL}`;
+        break;
+
+      default:
+        break;
+    }
+    return status;
+  }, [activeKey]);
+
   return (
     <PageContainer
       tabList={[
         {
-          key: ApplicationStatus.CREATED,
-          tab: 'Created',
+          key: ApplicationStatusUITabs.ALL,
+          tab: 'All',
         },
         {
-          key: ApplicationStatus.SUBMITTED,
+          key: ApplicationStatusUITabs.SUBMITTED,
           tab: 'Submitted',
         },
         {
-          key: ApplicationStatus.ACTION_REQUIRED,
+          key: ApplicationStatusUITabs.VERIFIED,
+          tab: 'Verified',
+        },
+        {
+          key: ApplicationStatusUITabs.ACTION_REQUIRED,
           tab: 'Action Required',
+        },
+        {
+          key: ApplicationStatusUITabs.SENT_TO,
+          tab: 'Sent To',
+        },
+        {
+          key: ApplicationStatusUITabs.COMPLETED,
+          tab: 'Completed',
         },
       ]}
       tabActiveKey={activeKey}
-      tabBarExtraContent={
-        <Tooltip title="Add new visa application" placement="left">
-          <Button
-            type="primary"
-            icon={<PlusOutlined />}
-            onClick={handleAddVisaApplication}
-          >
-            Add
-          </Button>
-        </Tooltip>
-      }
       onTabChange={setActiveKey}
     >
-      <VisaApplicationTable applicationStatus={activeKey} />
+      <VisaApplicationTable applicationStatus={mappedApplicationStatus} />
     </PageContainer>
   );
 };
