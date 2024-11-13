@@ -1,0 +1,15 @@
+export default {
+  'menu.Home.apply': 'Apply',
+  'menu.Home.dashboard': 'Dashboard',
+  'menu.Home.visa_applications': 'Visa Applications',
+  'menu.Home.visas': 'Visas',
+  'menu.Home.settings': 'Settings',
+  'menu.Home.login': 'Login',
+  'menu.Home.forgot_password': 'Forgot Password',
+  'menu.Home.sign_up': 'Sign Up',
+  'menu.Home.create_visa_application.payment_summary': 'Payment Summary',
+  'menu.Home.create_visa_application.add_documents': 'Add Documents',
+  'menu.Home.create_visa_application': 'Create Visa Application',
+  'menu.Home.create_visa_application.travel_details': 'Travel Details',
+  'menu.Home.Details': 'Details',
+};
