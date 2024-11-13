@@ -1,7 +1,5 @@
 import { SigninUserCredentials } from '@/types';
 import { ProForm, ProFormText } from '@ant-design/pro-components';
-import { useNavigate } from '@umijs/max';
-import { Button, Flex } from 'antd';
 import { FC } from 'react';
 
 interface Props {
@@ -10,8 +8,6 @@ interface Props {
     | undefined;
 }
 const LoginForm: FC<Props> = ({ onFinish }) => {
-  const navigate = useNavigate();
-
   return (
     <ProForm
       autoFocusFirstInput
@@ -37,11 +33,6 @@ const LoginForm: FC<Props> = ({ onFinish }) => {
         fieldProps={{ type: 'password' }}
         rules={[{ required: true, message: 'Please enter a password' }]}
       />
-      <Flex justify="right">
-        <Button type="link" onClick={() => navigate('/sign-up')}>
-          Don&apos;t havee an account? Sign up!
-        </Button>
-      </Flex>
     </ProForm>
   );
 };

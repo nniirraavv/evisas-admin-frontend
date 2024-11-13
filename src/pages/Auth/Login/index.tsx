@@ -29,7 +29,7 @@ export default () => {
         break;
 
       default:
-        title = 'Login';
+        title = 'Admin Login';
         break;
     }
     return title;

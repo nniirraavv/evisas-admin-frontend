@@ -27,6 +27,7 @@ interface Props {
             }[],
       ) => void)
     | undefined;
+  readonly?: boolean;
 }
 
 const FilePreviewCard: FC<Props> = ({
@@ -34,6 +35,7 @@ const FilePreviewCard: FC<Props> = ({
   onFileApproved,
   onFileDelete,
   onClassifierChange,
+  readonly,
 }) => {
   return (
     <>
@@ -49,7 +51,7 @@ const FilePreviewCard: FC<Props> = ({
             showSearch
             options={VISA_APPLICATION_DOCUMENT_CLASSIFIERS}
             value={file.fileType}
-            disabled={file.isApproved}
+            disabled={readonly || file.isApproved}
             onChange={onClassifierChange}
           />
         </Form.Item>
@@ -57,13 +59,16 @@ const FilePreviewCard: FC<Props> = ({
           icon={<DeleteOutlined />}
           type="primary"
           danger
-          className="mr-2"
+          className="mr-2 mt-2"
+          disabled={readonly}
           onClick={() => onFileDelete?.(file)}
         >
           Delete
         </Button>
         <SuccessButton
           icon={<CheckOutlined />}
+          disabled={readonly}
+          className="mt-2"
           onClick={() => {
             onFileApproved?.({ ...file });
           }}

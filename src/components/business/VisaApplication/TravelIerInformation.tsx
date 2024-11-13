@@ -71,11 +71,13 @@ interface Props {
   onTravellerUpdate?: () => void;
   onTravellerDelete?: () => void;
   onTravellerCreate?: () => void;
+  readonly?: boolean;
 }
 const TravelIerInformation: FC<Props> = ({
   onTravellerUpdate,
   onTravellerDelete,
   onTravellerCreate,
+  readonly,
 }) => {
   const { applicationNo } = useParams();
   const [spinning, setSpinning] = useState(false);
@@ -155,31 +157,36 @@ const TravelIerInformation: FC<Props> = ({
   return (
     <>
       <Step_Two
-        showTravellerEdit
-        showTravellerDelete
+        readonly={readonly}
+        showTravellerEdit={!readonly}
+        showTravellerDelete={!readonly}
         handleTravellerEdit={handleTravellerEdit}
         handleTravellerDelete={handleTravellerDelete}
       />
-      <AddNewVisaApplicationTraveller onTravellerCreate={onTravellerCreate} />
-      <Drawer
-        title={`Traveller Details ${
-          open ? ' - ' + getTravellerName(open) : ''
-        }`}
-        style={{ top: 20 }}
-        open={!!open}
-        onClose={closeModal}
-        width={1000}
-        footer={false}
-        maskClosable={false}
-      >
-        <Spin spinning={spinning}>
-          <TravellerDetailsForm
-            onCancel={closeModal}
-            onFinish={(data) => handleFinish(data, open)}
-            initialValues={open}
-          />
-        </Spin>
-      </Drawer>
+      {readonly ? null : (
+        <AddNewVisaApplicationTraveller onTravellerCreate={onTravellerCreate} />
+      )}
+      {readonly ? null : (
+        <Drawer
+          title={`Traveller Details ${
+            open ? ' - ' + getTravellerName(open) : ''
+          }`}
+          style={{ top: 20 }}
+          open={!!open}
+          onClose={closeModal}
+          width={1000}
+          footer={false}
+          maskClosable={false}
+        >
+          <Spin spinning={spinning}>
+            <TravellerDetailsForm
+              onCancel={closeModal}
+              onFinish={(data) => handleFinish(data, open)}
+              initialValues={open}
+            />
+          </Spin>
+        </Drawer>
+      )}
     </>
   );
 };

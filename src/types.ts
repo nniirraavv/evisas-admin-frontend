@@ -320,18 +320,27 @@ export interface SignupUserCredentials extends SigninUserCredentials {
 
 export enum ApplicationStatus {
   CREATED = 'CREATED',
-  SUBMITTED = 'SUBMITTED',
+  // All tab also needed
+  SUBMITTED = 'SUBMITTED', // tab required
 
-  ACTION_REQUIRED = 'ACTION_REQUIRED',
-  VERIFIED = 'VERIFIED',
+  ACTION_REQUIRED = 'ACTION_REQUIRED', // tab required
+  VERIFIED = 'VERIFIED', // tab required
 
-  SENT_TO_EXCHANGE = 'SENT_TO_EXCHANGE',
-  SENT_TO_IMM = 'SENT_TO_IMM',
+  SENT_TO_EXCHANGE = 'SENT_TO_EXCHANGE', // tab required
+  SENT_TO_IMM = 'SENT_TO_IMM', // tab required
 
-  APPROVED = 'APPROVED',
-  REJECTED = 'REJECTED',
+  APPROVED = 'APPROVED', // tab required
+  REJECTED = 'REJECTED', // tab required
   APPROVED_PARTIAL = 'APPROVED_PARTIAL',
   REJECTED_PARTIAL = 'REJECTED_PARTIAL',
+}
+export enum ApplicationStatusUITabs {
+  ALL = 'ALL',
+  SUBMITTED = 'SUBMITTED',
+  ACTION_REQUIRED = 'ACTION_REQUIRED',
+  VERIFIED = 'VERIFIED',
+  SENT_TO = 'SENT_TO',
+  COMPLETED = 'COMPLETED',
 }
 
 export enum TravellerStatus {

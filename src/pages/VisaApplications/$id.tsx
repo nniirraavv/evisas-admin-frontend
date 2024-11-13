@@ -69,6 +69,7 @@ const VisaApplication = () => {
       tab: VisaApplicationTabs.TravellerInfo,
       children: (
         <TravelIerInformation
+          readonly
           onTravellerUpdate={handleVisaApplicationTravellerUpdate}
           onTravellerDelete={handleVisaApplicationTravellerDelete}
           onTravellerCreate={handleVisaApplicationTravellerCreate}

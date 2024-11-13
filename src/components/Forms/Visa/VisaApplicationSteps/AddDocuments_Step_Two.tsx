@@ -169,6 +169,7 @@ interface TravellerEditActionProps {
   handleTravellerEdit?: (travellerNo: string) => void;
   showTravellerDelete?: boolean;
   handleTravellerDelete?: (travellerNo: string) => void;
+  readonly?: boolean;
 }
 interface TravellerDocumentsProps extends TravellerEditActionProps {
   traveller: Traveller;
@@ -192,6 +193,7 @@ const TravellerDocuments: FC<
   showTravellerDelete,
   handleTravellerDelete,
   travellerIndex,
+  readonly,
 }) => {
   const [open, setOpen] = useState<any>();
   const [deleting, setDeleting] = useState<string>();
@@ -352,7 +354,7 @@ const TravellerDocuments: FC<
             showSearch
             options={VISA_APPLICATION_DOCUMENT_CLASSIFIERS}
             value={entity.fileType}
-            disabled={entity?.isApproved}
+            disabled={readonly || entity?.isApproved}
             onChange={(value) => handleClassifierChange(value, entity)}
           />
         );
@@ -373,18 +375,20 @@ const TravellerDocuments: FC<
               icon={<EyeOutlined />}
               onClick={() => handleFileView(entity)}
             ></Button>
-            <Popconfirm
-              title="Delete Document"
-              description="Are you sure to delete this document?"
-              onConfirm={() => handleFileDelete(entity)}
-              okText="Yes"
-              cancelText="No"
-            >
-              <Button
-                loading={deleting === entity?.fileId}
-                icon={<DeleteOutlined />}
-              ></Button>
-            </Popconfirm>
+            {readonly ? null : (
+              <Popconfirm
+                title="Delete Document"
+                description="Are you sure to delete this document?"
+                onConfirm={() => handleFileDelete(entity)}
+                okText="Yes"
+                cancelText="No"
+              >
+                <Button
+                  loading={deleting === entity?.fileId}
+                  icon={<DeleteOutlined />}
+                ></Button>
+              </Popconfirm>
+            )}
             <Button
               icon={<DownloadOutlined />}
               onClick={(e) => {
@@ -471,38 +475,42 @@ const TravellerDocuments: FC<
               ),
               children: [
                 <Fragment key={'add_documents'}>
-                  <DocumentUploader
-                    key={'document_uploader'}
-                    onFileUploaded={handleFileUploaded}
-                    applicationNo={applicationNo}
-                    travellerNo={traveller?.travellerNo}
-                  />
-                  <Form.Item
-                    name="requiredDocuments"
-                    rules={[
-                      {
-                        validator() {
-                          if (requiredDocuments.length > 0) {
-                            return Promise.reject(
-                              'Please add all the required documents for this traveller',
-                            );
-                          } else {
-                            return Promise.resolve();
-                          }
-                        },
-                      },
-                    ]}
-                  >
-                    <RequiredDocumentsPicker
-                      key={'required_documents'}
-                      className="mt-3"
-                      uploadedFiles={files}
+                  {readonly ? null : (
+                    <DocumentUploader
+                      key={'document_uploader'}
                       onFileUploaded={handleFileUploaded}
-                      requiredDocuments={requiredDocuments}
-                      travellerNo={traveller?.travellerNo}
                       applicationNo={applicationNo}
+                      travellerNo={traveller?.travellerNo}
                     />
-                  </Form.Item>
+                  )}
+                  {readonly ? null : (
+                    <Form.Item
+                      name="requiredDocuments"
+                      rules={[
+                        {
+                          validator() {
+                            if (requiredDocuments.length > 0) {
+                              return Promise.reject(
+                                'Please add all the required documents for this traveller',
+                              );
+                            } else {
+                              return Promise.resolve();
+                            }
+                          },
+                        },
+                      ]}
+                    >
+                      <RequiredDocumentsPicker
+                        key={'required_documents'}
+                        className="mt-3"
+                        uploadedFiles={files}
+                        onFileUploaded={handleFileUploaded}
+                        requiredDocuments={requiredDocuments}
+                        travellerNo={traveller?.travellerNo}
+                        applicationNo={applicationNo}
+                      />
+                    </Form.Item>
+                  )}
                   <Form.Item
                     name="uploadedDocuments"
                     rules={[
@@ -556,6 +564,7 @@ const TravellerDocuments: FC<
             {previewFile ? (
               <FilePreviewCard
                 file={previewFile}
+                readonly={readonly}
                 documentClassifier={VISA_APPLICATION_DOCUMENT_CLASSIFIERS}
                 onFileDelete={handleFileDelete}
                 onFileApproved={handleFileApproved}
