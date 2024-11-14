@@ -33,4 +33,4 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: 'ap-south-1'  # Replace with your AWS region
         run: |
-          aws s3 sync dist/ s3://app.evisas.io/ --delete
+          aws s3 sync dist/ s3://admin.evisas.io/ --delete
