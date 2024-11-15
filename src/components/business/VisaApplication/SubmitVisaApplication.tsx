@@ -1,6 +1,6 @@
 import { ResponseStatus } from '@/constants';
 import { submitVisaApplication } from '@/services/visaApplication/VisaApplicationController';
-import { Button, message } from 'antd';
+import { Button, message, Tooltip } from 'antd';
 import { FC, useState } from 'react';
 
 interface Props {
@@ -27,14 +27,16 @@ const SubmitVisaApplication: FC<Props> = ({ applicationNo, onSuccess }) => {
     }
   };
   return (
-    <Button
-      type="primary"
-      loading={loading}
-      disabled={!applicationNo}
-      onClick={handleApplicationSubmit}
-    >
-      Submit Application
-    </Button>
+    <Tooltip title="Submit Application" placement="left">
+      <Button
+        type="primary"
+        loading={loading}
+        disabled={!applicationNo}
+        onClick={handleApplicationSubmit}
+      >
+        Submit
+      </Button>
+    </Tooltip>
   );
 };
 

@@ -1,5 +1,6 @@
 import { ResponseStatus } from '@/constants';
-import { PartialAntFile } from '@/types';
+import { IRemarkRequestBody, PartialAntFile } from '@/types';
+import { RcFile } from 'rc-upload/lib/interface';
 import { VisaInformation, VisaSearchInfo } from '../visa/typings';
 export interface IResponseStatus {
   status: ResponseStatus;
@@ -23,9 +24,9 @@ export interface PresignedUrlParams {
   fileContentType: string;
 }
 export interface ApplicantPresignedUrlParams {
-  fileName: string;
+  fileName?: string;
   fileType: string;
-  fileObjectKey: string;
+  fileObjectKey?: string;
 }
 
 export interface Fields {
@@ -157,6 +158,13 @@ export interface VisaApplicationFeeTraveller {
 }
 
 export interface VisaApplication {
+  agent: {
+    id: string;
+    sub: string;
+    name: string;
+    email: string;
+    userType: string;
+  };
   consulate: string;
   applicationNo: string;
   sourceCountry: string;
@@ -329,4 +337,18 @@ export interface OrderDetailObject {
   product: string;
   metadata: Metadata;
   order_note: string;
+}
+export interface IApproveVisaForTravellerRequestBody
+  extends IRemarkRequestBody {
+  visaDocuments: ApplicantPresignedUrlParams[];
+}
+export type AntServerFile = RcFile & {
+  response: {
+    file: {
+      uid: string;
+    };
+  };
+};
+export interface IApproveVisaForTraveller extends IRemarkRequestBody {
+  visaDocuments: AntServerFile[];
 }

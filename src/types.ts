@@ -252,6 +252,13 @@ export enum ShareVisaInfoListTypes {
 
 // Visa Application Details
 export interface VisaApplication {
+  agent: {
+    id: string;
+    sub: string;
+    name: string;
+    email: string;
+    userType: string;
+  };
   consulate: string;
   applicationNo: string;
   sourceCountry: string;
@@ -407,6 +414,12 @@ export enum ApplicationPaymentStatus {
   SUCCESS = 'SUCCESS',
   FAILED = 'FAILED',
 }
+export interface ISendToExchangeRequestBody {
+  exchangePartnerId: number;
+  remark: string;
+}
+export type IRemarkRequestBody = Pick<ISendToExchangeRequestBody, 'remark'>;
+export type SendToImmigrationForm = Pick<ISendToExchangeRequestBody, 'remark'>;
 // Backend Types
 
 export interface ApiError {
@@ -417,6 +430,10 @@ export interface ApiError {
 interface Error {
   code: string;
   message: string;
+}
+export enum UserTypes {
+  ADMIN = 'ADMIN',
+  AGENT = 'AGENT',
 }
 export interface PartialAntFile {
   name?: string;

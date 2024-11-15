@@ -1,16 +1,11 @@
-import { ApplicantDocument } from '@/services/visaApplication/typings';
+import {
+  AntServerFile,
+  ApplicantDocument,
+} from '@/services/visaApplication/typings';
 import { PartialAntFile } from '@/types';
 import { RcFile } from 'rc-upload/lib/interface';
 
-export function mapAntFileToServerFile(
-  file: RcFile & {
-    response: {
-      file: {
-        uid: string;
-      };
-    };
-  },
-) {
+export function mapAntFileToServerFile(file: AntServerFile) {
   if (!file) return;
   return {
     fileName: file?.name,

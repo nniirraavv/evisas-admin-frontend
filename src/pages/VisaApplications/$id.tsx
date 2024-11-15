@@ -1,13 +1,14 @@
 import ActivityLogs from '@/components/business/VisaApplication/ActivityLogs';
+import SendToExchange from '@/components/business/VisaApplication/Buttons/SendToExchange';
+import SendToImmigration from '@/components/business/VisaApplication/Buttons/SendToImmigration';
+import UndoSendToImmigration from '@/components/business/VisaApplication/Buttons/UndoSendToImmigration';
 import PaymentSummary from '@/components/business/VisaApplication/PaymentSummary';
-import SubmitVisaApplication from '@/components/business/VisaApplication/SubmitVisaApplication';
 import TravelIerInformation from '@/components/business/VisaApplication/TravelIerInformation';
 import TravellerInfo from '@/components/business/VisaApplication/TravellerInfo';
 import VisaApplicationBrief from '@/components/business/VisaApplication/VisaApplicationBrief';
 import VisaStatus from '@/components/business/VisaApplication/VisaStatus';
 import VisaSummary from '@/components/business/VisaApplication/VisaSummary';
 import { getVisaApplication } from '@/services/visaApplication/VisaApplicationController';
-import { ApplicationStatus } from '@/types';
 import { PageContainer } from '@ant-design/pro-components';
 import { useModel, useParams } from '@umijs/max';
 import { useMount } from 'ahooks';
@@ -79,7 +80,8 @@ const VisaApplication = () => {
     {
       key: VisaApplicationTabs.PaymentSummary,
       tab: VisaApplicationTabs.PaymentSummary,
-      children: <PaymentSummary allowPaymentAction />,
+      // Admin doesn't require any payment methods, only summary of the payment
+      children: <PaymentSummary allowPaymentAction={false} />,
     },
     {
       key: VisaApplicationTabs.VisaSummary,
@@ -105,13 +107,28 @@ const VisaApplication = () => {
         tabActiveKey={tabActiveKey}
         onTabChange={setTabActiveKey}
         extra={
-          applicationNo &&
-          visaApplication?.currentStatus !== ApplicationStatus.SUBMITTED ? (
-            <SubmitVisaApplication
-              applicationNo={applicationNo}
-              onSuccess={fetchVisaApplicationInfo}
+          <>
+            {/* There is no submit action on the admin application */}
+            {/* {applicationNo &&
+            visaApplication?.currentStatus !== ApplicationStatus.SUBMITTED ? (
+              <SubmitVisaApplication
+                applicationNo={applicationNo}
+                onSuccess={fetchVisaApplicationInfo}
+              />
+            ) : null} */}
+            <SendToImmigration
+              applicationNo={visaApplication?.applicationNo}
+              currentStatus={visaApplication?.currentStatus}
             />
-          ) : null
+            <UndoSendToImmigration
+              applicationNo={visaApplication?.applicationNo}
+              currentStatus={visaApplication?.currentStatus}
+            />
+            <SendToExchange
+              applicationNo={visaApplication?.applicationNo}
+              currentStatus={visaApplication?.currentStatus}
+            />
+          </>
         }
       ></PageContainer>
     </Spin>

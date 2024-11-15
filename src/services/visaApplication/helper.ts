@@ -15,6 +15,7 @@ export async function uploadApplicantDocument(
   documentType: string,
   onProgress: ((event: UploadProgressEvent) => void) | undefined,
   onSuccess: ((body: any, xhr?: XMLHttpRequest) => void) | undefined,
+  skipCreateDocumentForApplication?: boolean,
 ) {
   try {
     const signedUrlResponse = await getApplicantDocumentPresignedUrl(
@@ -53,6 +54,14 @@ export async function uploadApplicantDocument(
         },
       };
 
+      if (skipCreateDocumentForApplication) {
+        onSuccess?.(successData);
+        return {
+          fileName: signedUrlResponse?.item?.fileDocument?.fileName,
+          fileType: documentType,
+          fileObjectKey: signedUrlResponse?.item?.fileDocument?.fileObjectKey,
+        };
+      }
       const response = await createApplicantDocument(
         applicationNo,
         applicantNo,
