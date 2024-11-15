@@ -8,11 +8,11 @@ import {
   VisaApplication,
 } from '@/services/visaApplication/typings';
 import {
-  deleteVisaApplication,
+  // deleteVisaApplication,
   getVisaApplications,
 } from '@/services/visaApplication/VisaApplicationController';
 import { ApplicationStatus, ApplicationStatusUITabs } from '@/types';
-import { DeleteOutlined, EyeOutlined } from '@ant-design/icons';
+import { EyeOutlined } from '@ant-design/icons';
 import {
   ActionType,
   PageContainer,
@@ -21,17 +21,7 @@ import {
 } from '@ant-design/pro-components';
 import { useNavigate } from '@umijs/max';
 import { useUpdateEffect } from 'ahooks';
-import {
-  Button,
-  Flex,
-  List,
-  message,
-  Popconfirm,
-  Popover,
-  Space,
-  Tooltip,
-  Typography,
-} from 'antd';
+import { Button, Flex, List, Popover, Space, Tooltip, Typography } from 'antd';
 import { FC, useMemo, useRef, useState } from 'react';
 
 const { Text } = Typography;
@@ -47,15 +37,15 @@ const VisaApplicationTable: FC<Props> = ({ applicationStatus }) => {
   const handleSelect = (entity: VisaApplication) => {
     navigate(`/visa/applications/${entity.applicationNo}`);
   };
-  const handleDelete = async (entity: VisaApplication) => {
-    try {
-      await deleteVisaApplication(entity?.applicationNo);
-      tableActionRef?.current?.reload();
-      message.success('Visa application deleted successfully!');
-    } catch (error) {
-      console.log('Error on delete: ', error);
-    }
-  };
+  // const handleDelete = async (entity: VisaApplication) => {
+  //   try {
+  //     await deleteVisaApplication(entity?.applicationNo);
+  //     tableActionRef?.current?.reload();
+  //     message.success('Visa application deleted successfully!');
+  //   } catch (error) {
+  //     console.log('Error on delete: ', error);
+  //   }
+  // };
 
   useUpdateEffect(() => {
     tableActionRef?.current?.reload();
@@ -170,6 +160,15 @@ const VisaApplicationTable: FC<Props> = ({ applicationStatus }) => {
       },
     },
     {
+      title: 'Created By',
+      dataIndex: 'agent.name',
+      sorter: true,
+      render(_, entity) {
+        return <Text>{entity?.agent?.name}</Text>;
+      },
+      hideInSearch: true,
+    },
+    {
       title: 'Created At',
       dataIndex: 'createdAt',
       sorter: true,
@@ -205,7 +204,7 @@ const VisaApplicationTable: FC<Props> = ({ applicationStatus }) => {
                 onClick={() => handleSelect(entity)}
               ></Button>
             </Tooltip>
-            <Popconfirm
+            {/* <Popconfirm
               title="Delete Visa Application"
               description="Are you sure to delete this visa application?"
               onConfirm={(e) => {
@@ -219,7 +218,7 @@ const VisaApplicationTable: FC<Props> = ({ applicationStatus }) => {
               <Tooltip title="Delete visa application" placement="left">
                 <Button type="primary" icon={<DeleteOutlined />}></Button>
               </Tooltip>
-            </Popconfirm>
+            </Popconfirm> */}
           </Space>
         );
       },

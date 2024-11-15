@@ -1,5 +1,7 @@
 import { getDateTimeFormat } from '@/lib/dateUtils';
 import { StatusHistory } from '@/services/visaApplication/typings';
+import { UserTypes } from '@/types';
+import { CrownOutlined } from '@ant-design/icons';
 import { ProList } from '@ant-design/pro-components';
 import { Typography } from 'antd';
 import { FC } from 'react';
@@ -20,7 +22,18 @@ const ActivityLogs: FC<Props> = ({ statusHistory }) => {
         title: {
           dataIndex: 'user',
           render(_, entity) {
-            return <Text strong>{entity?.user?.name}</Text>;
+            return (
+              <Text strong>
+                {entity?.user?.userType === UserTypes.ADMIN ? (
+                  <Text>
+                    <CrownOutlined className="me-2" />
+                    Admin
+                  </Text>
+                ) : (
+                  entity?.user?.name
+                )}
+              </Text>
+            );
           },
         },
         description: {

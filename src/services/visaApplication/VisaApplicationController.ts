@@ -1,3 +1,4 @@
+import { ISendToExchangeRequestBody } from '@/types';
 import { request } from '@umijs/max';
 import {
   CreateApplicationBody,
@@ -12,6 +13,10 @@ import {
   VisaApplication,
 } from './typings';
 
+/**
+ * controllerBaseUrl
+ * @returns `/v1/admin/applications`
+ */
 const controllerBaseUrl = '/v1/admin/applications';
 
 /** POST /v1/applications */
@@ -48,6 +53,23 @@ export async function getVisaApplication(
     `${controllerBaseUrl}/${applicationNo}`,
     {
       method: 'GET',
+      ...(options || {}),
+    },
+  );
+}
+
+/** POST - /v1/admin/applications/:applicationNo/travellers/:applicantNo/visa-documents/upload-presign-url */
+export async function getAdminTravellerPresignedUrl(
+  applicationNo: string,
+  applicantNo: string,
+  params: PresignedUrlParams,
+  options?: { [key: string]: any },
+) {
+  return request<PresignedUrlResponse>(
+    `${controllerBaseUrl}/${applicationNo}/travellers/${applicantNo}/visa-documents/upload-presign-url`,
+    {
+      method: 'POST',
+      data: { ...params },
       ...(options || {}),
     },
   );
@@ -101,6 +123,70 @@ export async function submitVisaApplication(
     `${controllerBaseUrl}/${applicationNo}/submit`,
     {
       method: 'PATCH',
+      ...(options || {}),
+    },
+  );
+}
+
+/** POST - /v1/admin/applications/:applicationNo/send-to-exchange */
+/**
+ * sendToExchange
+ * @param applicationNo string
+ * @param options object
+ * @description Send the visa application to an exchange partner
+ */
+export async function sendToExchange(
+  applicationNo: string,
+  data: ISendToExchangeRequestBody,
+  options?: { [key: string]: any },
+) {
+  return request<IResponseStatus>(
+    `${controllerBaseUrl}/${applicationNo}/send-to-exchange`,
+    {
+      method: 'POST',
+      data,
+      ...(options || {}),
+    },
+  );
+}
+/** POST - /v1/admin/applications/:applicationNo/send-to-immigration */
+/**
+ * sendToImmigration
+ * @param applicationNo string
+ * @param options object
+ * @description Send the visa application for immigration
+ */
+export async function sendToImmigration(
+  applicationNo: string,
+  data: Pick<ISendToExchangeRequestBody, 'remark'>,
+  options?: { [key: string]: any },
+) {
+  return request<IResponseStatus>(
+    `${controllerBaseUrl}/${applicationNo}/send-to-immigration`,
+    {
+      method: 'POST',
+      data,
+      ...(options || {}),
+    },
+  );
+}
+/** POST - /v1/admin/applications/:applicationNo/undo-send-to-immigration */
+/**
+ * undoSendToImmigration
+ * @param applicationNo string
+ * @param options object
+ * @description Send the visa application for immigration
+ */
+export async function undoSendToImmigration(
+  applicationNo: string,
+  data: Pick<ISendToExchangeRequestBody, 'remark'>,
+  options?: { [key: string]: any },
+) {
+  return request<IResponseStatus>(
+    `${controllerBaseUrl}/${applicationNo}/undo-send-to-immigration`,
+    {
+      method: 'POST',
+      data,
       ...(options || {}),
     },
   );

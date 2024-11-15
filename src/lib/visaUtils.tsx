@@ -1,3 +1,7 @@
+import ApproveVisa from '@/components/business/VisaApplication/Buttons/Traveller/ApproveVisa';
+import MarkAsActionRequired from '@/components/business/VisaApplication/Buttons/Traveller/MarkAsActionRequired';
+import MarkAsVerified from '@/components/business/VisaApplication/Buttons/Traveller/MarkAsVerified';
+import RejectVisa from '@/components/business/VisaApplication/Buttons/Traveller/RejectVisa';
 import {
   TRAVELLER_DETAIL_FIELDS,
   VISA_APPLICATION_DOCUMENT_CLASSIFIERS,
@@ -16,6 +20,7 @@ import {
   TravellerDocumentFileTypes,
   TravellerGender,
 } from '@/types';
+import { MenuProps } from 'antd';
 import { normalizeToServerDate } from './dateUtils';
 import { mapServerFileToAntFile } from './uploadUtils';
 
@@ -141,4 +146,69 @@ export function mapVisaApplicationDataToForm(data?: VisaApplication) {
     ...data,
     travellers: data?.travellers?.map(mapVisaApplicantToForm),
   };
+}
+export function getTravellerStatusUpdateActions(
+  applicationNo: string,
+  travellerNo: string,
+  currentApplicationStatus?: string,
+): MenuProps['items'] {
+  const filteredItems = [
+    {
+      label:
+        currentApplicationStatus === ApplicationStatus.SUBMITTED ? (
+          <MarkAsActionRequired
+            buttonType="text"
+            buttonBlock
+            applicationNo={applicationNo}
+            applicantNo={travellerNo}
+            currentStatus={currentApplicationStatus}
+          />
+        ) : undefined,
+      key: ApplicationStatus.ACTION_REQUIRED,
+    },
+    {
+      label:
+        currentApplicationStatus === ApplicationStatus.SUBMITTED ? (
+          <MarkAsVerified
+            buttonType="text"
+            buttonBlock
+            applicationNo={applicationNo}
+            applicantNo={travellerNo}
+            currentStatus={currentApplicationStatus}
+          />
+        ) : undefined,
+      key: ApplicationStatus.VERIFIED,
+    },
+    {
+      label:
+        currentApplicationStatus === ApplicationStatus.VERIFIED ||
+        currentApplicationStatus === ApplicationStatus.SENT_TO_IMM ||
+        currentApplicationStatus === ApplicationStatus.SENT_TO_EXCHANGE ? (
+          <ApproveVisa
+            buttonType="text"
+            buttonBlock
+            applicationNo={applicationNo}
+            applicantNo={travellerNo}
+            currentStatus={currentApplicationStatus}
+          />
+        ) : undefined,
+      key: ApplicationStatus.APPROVED,
+    },
+    {
+      label:
+        currentApplicationStatus === ApplicationStatus.VERIFIED ||
+        currentApplicationStatus === ApplicationStatus.SENT_TO_IMM ||
+        currentApplicationStatus === ApplicationStatus.SENT_TO_EXCHANGE ? (
+          <RejectVisa
+            buttonType="text"
+            buttonBlock
+            applicationNo={applicationNo}
+            applicantNo={travellerNo}
+            currentStatus={currentApplicationStatus}
+          />
+        ) : undefined,
+      key: ApplicationStatus.REJECTED,
+    },
+  ]?.filter((item) => item?.label);
+  return filteredItems;
 }

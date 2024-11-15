@@ -4,6 +4,7 @@ import FileReviewStatus from '@/components/business/FileReviewStatus';
 import RequiredDocumentsPicker from '@/components/business/RequiredDocumentsPicker';
 import { VISA_APPLICATION_DOCUMENT_CLASSIFIERS } from '@/constants';
 import { isFileImage } from '@/lib/utils';
+import { getTravellerStatusUpdateActions } from '@/lib/visaUtils';
 import { RequiredDocument } from '@/services/visa/typings';
 import { uploadApplicantDocument } from '@/services/visaApplication/helper';
 import {
@@ -23,6 +24,7 @@ import {
   EyeOutlined,
   FileImageOutlined,
   FilePdfOutlined,
+  MoreOutlined,
   UploadOutlined,
 } from '@ant-design/icons';
 import { ProColumns, ProForm, ProTable } from '@ant-design/pro-components';
@@ -33,6 +35,7 @@ import {
   Col,
   Collapse,
   ConfigProvider,
+  Dropdown,
   Empty,
   Flex,
   Form,
@@ -175,6 +178,7 @@ interface TravellerDocumentsProps extends TravellerEditActionProps {
   traveller: Traveller;
   travellerIndex: number;
   applicationNo: string;
+  applicationStatus?: string;
   requiredDocuments: RequiredDocument[];
 }
 const TravellerDocuments: FC<
@@ -186,6 +190,7 @@ const TravellerDocuments: FC<
   traveller,
   requiredDocuments,
   applicationNo,
+  applicationStatus,
   files,
   onFiles,
   showTravellerEdit,
@@ -402,6 +407,16 @@ const TravellerDocuments: FC<
     },
   ];
 
+  const items = useMemo(
+    () =>
+      getTravellerStatusUpdateActions(
+        applicationNo,
+        traveller?.travellerNo,
+        applicationStatus,
+      ),
+    [applicationStatus],
+  );
+
   return (
     <>
       <ConfigProvider
@@ -427,7 +442,7 @@ const TravellerDocuments: FC<
                     strong
                   >{`${traveller.givenName} ${traveller.surName}`}</Text>
                   <div>
-                    {showTravellerEdit ? (
+                    {!readonly && showTravellerEdit ? (
                       <Tooltip title="Edit Traveller" placement="left">
                         <Button
                           shape="circle"
@@ -441,7 +456,7 @@ const TravellerDocuments: FC<
                         />
                       </Tooltip>
                     ) : null}
-                    {showTravellerDelete ? (
+                    {!readonly && showTravellerDelete ? (
                       <Tooltip title="Delete Traveller" placement="left">
                         <Popconfirm
                           title="Delete Traveller"
@@ -469,6 +484,17 @@ const TravellerDocuments: FC<
                           />
                         </Popconfirm>
                       </Tooltip>
+                    ) : null}
+                    {items?.length ? (
+                      <Dropdown menu={{ items }} trigger={['click']}>
+                        <Button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                          }}
+                          icon={<MoreOutlined />}
+                        />
+                      </Dropdown>
                     ) : null}
                   </div>
                 </Flex>
@@ -698,6 +724,7 @@ const Step_Two: FC<TravellerEditActionProps> = (props) => {
               key={traveller.travellerNo}
               requiredDocuments={requiredDocuments}
               applicationNo={visaApplication?.applicationNo}
+              applicationStatus={visaApplication?.currentStatus}
               {...props}
             />
           ))}

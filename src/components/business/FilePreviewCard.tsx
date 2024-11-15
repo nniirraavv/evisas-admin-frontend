@@ -55,26 +55,28 @@ const FilePreviewCard: FC<Props> = ({
             onChange={onClassifierChange}
           />
         </Form.Item>
-        <Button
-          icon={<DeleteOutlined />}
-          type="primary"
-          danger
-          className="mr-2 mt-2"
-          disabled={readonly}
-          onClick={() => onFileDelete?.(file)}
-        >
-          Delete
-        </Button>
-        <SuccessButton
-          icon={<CheckOutlined />}
-          disabled={readonly}
-          className="mt-2"
-          onClick={() => {
-            onFileApproved?.({ ...file });
-          }}
-        >
-          Approve
-        </SuccessButton>
+        {readonly ? null : (
+          <Button
+            icon={<DeleteOutlined />}
+            type="primary"
+            danger
+            className="mr-2 mt-2"
+            onClick={() => onFileDelete?.(file)}
+          >
+            Delete
+          </Button>
+        )}
+        {readonly ? null : (
+          <SuccessButton
+            icon={<CheckOutlined />}
+            className="mt-2"
+            onClick={() => {
+              onFileApproved?.({ ...file });
+            }}
+          >
+            Approve
+          </SuccessButton>
+        )}
       </Flex>
       {isFileImage(file?.fileName) ? (
         <Image

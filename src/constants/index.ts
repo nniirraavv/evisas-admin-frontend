@@ -485,7 +485,7 @@ export enum VisaApplicationStatusColors {
   SUBMITTED = 'green',
 
   ACTION_REQUIRED = 'orange',
-  VERIFIED = 'lightblue',
+  VERIFIED = 'deepskyblue',
 
   SENT_TO_EXCHANGE = 'purple',
   SENT_TO_IMM = 'pink',
